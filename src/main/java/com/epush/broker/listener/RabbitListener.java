@@ -4,9 +4,9 @@ import com.epush.broker.event.LoginEvent;
 import com.epush.broker.event.LogoutEvent;
 import com.epush.broker.event.PubEvent;
 import com.epush.broker.event.SyncEvent;
+import com.epush.broker.sender.ESender;
 import com.ericsson.otp.erlang.OtpErlangTuple;
 import com.ericsson.otp.erlang.OtpInputStream;
-import com.ericsson.otp.erlang.OtpOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -20,6 +20,8 @@ public class RabbitListener implements MessageListener{
 
     private static final Logger logger = LoggerFactory.getLogger(RabbitListener.class);
 
+    private ESender eSender;
+
     public void onMessage(Message message) {
         try {
             String routingKey = message.getMessageProperties().getReceivedRoutingKey();
@@ -29,6 +31,7 @@ public class RabbitListener implements MessageListener{
 
             if ("epush-login-queue".equals(routingKey)) {
                 LoginEvent loginEvent = new LoginEvent(msg);
+                eSender.sendSync("test",loginEvent.getPid());
                 event = loginEvent;
             } else if ("epush-logout-queue".equals(routingKey)) {
                 LogoutEvent logoutEvent = new LogoutEvent(msg);
@@ -47,5 +50,13 @@ public class RabbitListener implements MessageListener{
             logger.error("message parser error {}",e);
         }
 
+    }
+
+    public ESender geteSender() {
+        return eSender;
+    }
+
+    public void seteSender(ESender eSender) {
+        this.eSender = eSender;
     }
 }

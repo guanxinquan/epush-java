@@ -17,7 +17,9 @@
     <rabbit:template id = "rabbitTemplate" connection-factory="connectionFactory"/>
 
 
-    <bean id="rabbitListener" class="com.epush.broker.listener.RabbitListener"/>
+    <bean id="rabbitListener" class="com.epush.broker.listener.RabbitListener">
+        <property name="eSender" ref="eSender"/>
+    </bean>
 
     <rabbit:listener-container connection-factory="connectionFactory">
         <rabbit:listener ref="rabbitListener" method="onMessage" queues="epush-login-queue,epush-logout-queue,epush-pub-queue,epush-sync-queue"/>
