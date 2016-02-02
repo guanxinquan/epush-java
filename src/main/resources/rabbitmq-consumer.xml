@@ -1,0 +1,31 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+           http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="connectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+        <property name="host" value="localhost"/>
+        <property name="username" value="epush"/>
+        <property name="password" value="epush"/>
+        <property name="virtualHost" value="epush"/>
+        <property name="channelCacheSize" value="10"/>
+    </bean>
+
+    <rabbit:template id = "rabbitTemplate" connection-factory="connectionFactory"/>
+
+
+    <bean id="rabbitListener" class="com.epush.broker.listener.RabbitListener"/>
+
+    <rabbit:listener-container connection-factory="connectionFactory">
+        <rabbit:listener ref="rabbitListener" method="onMessage" queues="epush-login-queue,epush-logout-queue,epush-pub-queue,epush-sync-queue"/>
+    </rabbit:listener-container>
+
+    <rabbit:queue name="epush-login-queue" id="epushLoginQueue"/>
+    <rabbit:queue name="epush-logout-queue" id="epushLogoutQueue"/>
+    <rabbit:queue name="epush-pub-queue" id="epushPubQueue"/>
+    <rabbit:queue name="epush-sync-queue" id="epushSyncQueue"/>
+
+</beans>
