@@ -10,4 +10,8 @@
     <bean id="pushRegister" class="com.epush.register.MongoRegister">
         <property name="template" ref="mongoTemplate"/>
     </bean>
+
+    <bean id="mongodbMessageStore" class="com.epush.store.MongodbMessageStore">
+        <property name="template" ref="mongoTemplate"/>
+    </bean>
 </beans>

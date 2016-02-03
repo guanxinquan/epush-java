@@ -19,6 +19,8 @@
 
     <bean id="rabbitListener" class="com.epush.broker.listener.RabbitListener">
         <property name="eSender" ref="eSender"/>
+        <property name="register" ref="pushRegister"/>
+        <property name="store" ref="mongodbMessageStore"/>
     </bean>
 
     <rabbit:listener-container connection-factory="connectionFactory">

@@ -9,9 +9,9 @@
         </layout>
     </appender>
 
-
-    <root level="info">
+    <logger name="com.epush" level="warn">
         <appender-ref ref="STDOUT"/>
-    </root>
+    </logger>
+
 
 </configuration>

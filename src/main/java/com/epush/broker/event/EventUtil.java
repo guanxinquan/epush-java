@@ -1,6 +1,7 @@
 package com.epush.broker.event;
 
 import com.ericsson.otp.erlang.*;
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -31,6 +32,11 @@ public class EventUtil {
             retMap.put(getString(es.getKey()),getString(es.getValue()));
         }
         return retMap;
+    }
+
+    public static final byte[] getPidBinary(OtpErlangPid pid){
+        OtpOutputStream out = new OtpOutputStream(pid);
+        return out.toByteArray();
     }
 
 
