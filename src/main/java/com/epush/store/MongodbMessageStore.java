@@ -4,6 +4,7 @@ import com.epush.utils.EPushUtils;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -40,7 +41,7 @@ public class MongodbMessageStore implements MessageStore{
         }else{
             objectId = new ObjectId(syncTag);
         }
-        return template.find(new Query(where("user").is(user).and("channel").is(channel).and("id").gt(objectId)).with(new Sort(Sort.Direction.ASC,"id")),MessageStoreModel.class,COLLECTION_NAME);
+        return template.find(new Query(where("user").is(user).and("channel").is(channel).and("id").gt(objectId)).with(new Sort(Sort.Direction.ASC,"id")).limit(50),MessageStoreModel.class,COLLECTION_NAME);
     }
 
     public MongoTemplate getTemplate() {

@@ -64,6 +64,7 @@ public class RabbitListener implements MessageListener{
             } else if ("epush-pub-queue".equals(routingKey)) {
                 PubEvent pubEvent = new PubEvent(msg);
                 store.saveMessage(new MessageStoreModel(pubEvent.getUserName(),pubEvent.getChannelName(),pubEvent.getMessage(),new Date()));
+                eSender.sendSync(pubEvent.getChannelName(),pubEvent.getPid());
                 event = pubEvent;
             } else if ("epush-sync-queue".equals(routingKey)) {
                 SyncEvent syncEvent = new SyncEvent(msg);
@@ -107,7 +108,7 @@ public class RabbitListener implements MessageListener{
         List<MessageStoreModel> messages =  store.syncMessage(userName,channel,tag);
         if(!messages.isEmpty()) {
             try {
-                eSender.sendMessage(channel,tag, messages.get(0).getId(),toPacket(messages),pid);
+                eSender.sendMessage(channel,tag, messages.get(messages.size() -1).getId(),toPacket(messages),pid);
             } catch (IOException e) {
                 logger.error("esend message error ",e);
             }

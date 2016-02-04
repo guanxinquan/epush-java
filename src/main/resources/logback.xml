@@ -9,7 +9,7 @@
         </layout>
     </appender>
 
-    <logger name="com.epush" level="warn">
+    <logger name="com.epush" level="info">
         <appender-ref ref="STDOUT"/>
     </logger>
 
